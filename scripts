@@ -3,6 +3,8 @@
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
+_G.CanLock = false
+
 local AimLock = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local AimButton = Instance.new("TextButton")
@@ -39,7 +41,7 @@ AimButton.MouseButton1Down:Connect(function()
 			Notif.Text = "AIM LOCK : ON"
 			Notif.TextColor3 = Color3.fromRGB(0,255,0)
 			function ClosetPlayer()
-				local Dist = 350
+				local Dist = 465
 				local Target = nil
 				for i,v in pairs(Players:GetPlayers()) do
 					if v ~= LocalPlayer then
@@ -48,11 +50,6 @@ AimButton.MouseButton1Down:Connect(function()
 							if Magnitude < Dist then
 								Dist = Magnitude
 								Target = v
-								task.wait(0.7)
-								game.StarterGui:SetCore("SendNotification", {
-									Title = "Lock Success",
-									Text = v.Name .. "(" .. v.DisplayName .. ")"
-								})
 							end
 						end
 					end
@@ -96,48 +93,48 @@ local function NEFLDD_fake_script() -- AimLock.MainScripts
 		Title = "Made By 4niFar",
 		Text = "Gui Loaded!"
 	})
-	
+
 	-- Players
 	local Players = game:GetService("Players")
 	local LocalPlayer = Players.LocalPlayer
-	
+
 	-- Service
 	local UserInputService = game:GetService("UserInputService")
 	local RunService = game:GetService("RunService")
-	
+
 	-- Camera
 	local Camera = workspace.CurrentCamera
-	
+
 	-- Settings
 	_G.CanLock = false
-	
+
 	local settings = {
 		keybind = Enum.KeyCode.Q
 	}
-	
+
 	local Aiming = false
-	
+
 	UserInputService.InputBegan:Connect(function(Input)
 		if _G.CanLock == false then return end
-		
+
 		if Input.KeyCode == settings.keybind then
 			Aiming = true
 		end
 	end)
-	
+
 	UserInputService.InputEnded:Connect(function(Input)
 		if _G.CanLock == false then return end
-	
+
 		if Input.KeyCode == settings.keybind then
 			Aiming = false
 		end
 	end)
-	
+
 	RunService.RenderStepped:Connect(function()
 		if Aiming then
 			Camera.CFrame = CFrame.new(Camera.CFrame.Position,ClosetPlayer().Character.HumanoidRootPart.Position)
 		end	
 	end)
-	
+
 end
 coroutine.wrap(NEFLDD_fake_script)()
