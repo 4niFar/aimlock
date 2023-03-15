@@ -1,8 +1,10 @@
 -- Made By 4niFar
 
+-- Players
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
+-- Settings
 _G.CanLock = false
 
 function ClosetPlayer()
@@ -35,8 +37,7 @@ AimLock.Enabled = false
 AimLock.Parent = game.CoreGui
 AimLock.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-task.wait(1.5)
-AimLock.Enabled = true
+task.wait(1.8)
 game.StarterGui:SetCore("SendNotification", {
 	Title = "Made By 4niFar",
 	Text = "Gui Loaded!"
@@ -62,17 +63,6 @@ AimButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 AimButton.TextScaled = true
 AimButton.TextSize = 14.000
 AimButton.TextWrapped = true
-AimButton.MouseButton1Down:Connect(function()
-	if _G.CanLock == false then
-		_G.CanLock = true
-		MainFrame.Notif.Text = "AIM LOCK : ON"
-		MainFrame.Notif.TextColor3 = Color3.fromRGB(0,255,0)
-	else
-		_G.CanLock = false
-		MainFrame.Notif.Text = "AIM LOCK : OFF"
-		MainFrame.Notif.TextColor3 = Color3.fromRGB(255,0,0)
-	end
-end)
 
 UICorner.CornerRadius = UDim.new(0, 12)
 UICorner.Parent = AimButton
@@ -105,19 +95,18 @@ Delete.TextColor3 = Color3.fromRGB(0, 0, 0)
 Delete.TextScaled = true
 Delete.TextSize = 14.000
 Delete.TextWrapped = true
-Delete.MouseButton1Down:Connect(function()
-	AimLock:Destroy()
-end)
 
 -- Scripts:
 
-local function YKMMEL_fake_script() -- AimLock.AimLockScripts
-	local scripts = Instance.new('LocalScript', AimLock)
-	scripts.Name = "AimLockScripts"
-	
-	-- Players
-	local Players = game:GetService("Players")
-	local LocalPlayer = Players.LocalPlayer
+local function QGREILS_fake_script() -- AimLock.AimLockScripts 
+	local script = Instance.new('LocalScript', AimLock)
+
+	task.wait(1.5)
+	script.Parent.Enabled = true
+	game.StarterGui:SetCore("SendNotification", {
+		Title = "Made By 4niFar",
+		Text = "Gui Loaded!"
+	})
 	
 	-- Service
 	local UserInputService = game:GetService("UserInputService")
@@ -126,7 +115,25 @@ local function YKMMEL_fake_script() -- AimLock.AimLockScripts
 	-- Camera
 	local Camera = workspace.CurrentCamera
 	
-	script.Parent.MainFrame.Delete.MouseButton1Down:Connect(function()
+	-- Variables
+	local MainFrame = script.Parent.MainFrame
+	local AimButton = MainFrame.AimButton
+	local Notif = MainFrame.Notif
+	local Delete = MainFrame.Delete
+	
+	AimButton.MouseButton1Down:Connect(function()
+		if _G.CanLock == false then
+			_G.CanLock = true
+			Notif.Text = "AIM LOCK : ON"
+			Notif.TextColor3 = Color3.fromRGB(0,255,0)
+		else
+			_G.CanLock = false
+			Notif.Text = "AIM LOCK : OFF"
+			Notif.TextColor3 = Color3.fromRGB(255,0,0)
+		end
+	end)
+	
+	Delete.MouseButton1Down:Connect(function()
 		script.Parent:Destroy()
 	end)
 	
@@ -158,4 +165,4 @@ local function YKMMEL_fake_script() -- AimLock.AimLockScripts
 		end	
 	end)
 end
-coroutine.wrap(YKMMEL_fake_script)()
+coroutine.wrap(QGREILS_fake_script)()
