@@ -1,0 +1,143 @@
+-- Made By 4niFar
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local AimLock = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local AimButton = Instance.new("TextButton")
+local UICorner = Instance.new("UICorner")
+local UICorner_2 = Instance.new("UICorner")
+local Notif = Instance.new("TextLabel")
+
+AimLock.Name = "AimLock"
+AimLock.Parent = game.CoreGui
+AimLock.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+MainFrame.Name = "MainFrame"
+MainFrame.Active = true
+MainFrame.Parent = AimLock
+MainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+MainFrame.Position = UDim2.new(0.0142764449, 0, 0.150549456, 0)
+MainFrame.Size = UDim2.new(0.205061629, 0, 0.107692309, 0)
+
+AimButton.Name = "AimButton"
+AimButton.Parent = MainFrame
+AimButton.BackgroundColor3 = Color3.fromRGB(0, 122, 167)
+AimButton.Position = UDim2.new(0.0189873427, 0, 0.204081625, 0)
+AimButton.Size = UDim2.new(0.958860755, 0, 0.387755156, 0)
+AimButton.Font = Enum.Font.GothamBold
+AimButton.Text = "AIM LOCK"
+AimButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+AimButton.TextScaled = true
+AimButton.TextSize = 14.000
+AimButton.TextWrapped = true
+AimButton.MouseButton1Down:Connect(function()
+	AimButton.MouseButton1Down:Connect(function()
+		if _G.CanLock == false then
+			_G.CanLock = true
+			Notif.Text = "AIM LOCK : ON"
+			Notif.TextColor3 = Color3.fromRGB(0,255,0)
+			function ClosetPlayer()
+				local Dist = 350
+				local Target = nil
+				for i,v in pairs(Players:GetPlayers()) do
+					if v ~= LocalPlayer then
+						if v.Character and v.Character:FindFirstChild("HumanoidRootPart") and _G.CanLock then
+							local Magnitude = (v.Character.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+							if Magnitude < Dist then
+								Dist = Magnitude
+								Target = v
+								task.wait(0.7)
+								game.StarterGui:SetCore("SendNotification", {
+									Title = "Lock Success",
+									Text = v.Name .. "(" .. v.DisplayName .. ")"
+								})
+							end
+						end
+					end
+				end
+				return Target
+			end
+		else
+			_G.CanLock = false
+			Notif.TextColor3 = Color3.fromRGB(255,0,0)
+		end
+	end)
+end)
+
+UICorner.CornerRadius = UDim.new(0, 12)
+UICorner.Parent = AimButton
+
+UICorner_2.CornerRadius = UDim.new(0, 10)
+UICorner_2.Parent = MainFrame
+
+Notif.Name = "Notif"
+Notif.Parent = MainFrame
+Notif.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Notif.BackgroundTransparency = 1.000
+Notif.Position = UDim2.new(0.170886099, 0, 0.653061271, 0)
+Notif.Size = UDim2.new(0.655063331, 0, 0.234693885, 0)
+Notif.Font = Enum.Font.GothamBold
+Notif.Text = "AIM LOCK : OFF"
+Notif.TextColor3 = Color3.fromRGB(255, 0, 0)
+Notif.TextScaled = true
+Notif.TextSize = 14.000
+Notif.TextWrapped = true
+
+-- Scripts:
+
+local function NEFLDD_fake_script() -- AimLock.MainScripts 
+	local script = Instance.new('LocalScript', AimLock)
+
+	task.wait(1.5)
+	script.Parent.Enabled = true
+	game.StarterGui:SetCore("SendNotification", {
+		Title = "Made By 4niFar",
+		Text = "Gui Loaded!"
+	})
+	
+	-- Players
+	local Players = game:GetService("Players")
+	local LocalPlayer = Players.LocalPlayer
+	
+	-- Service
+	local UserInputService = game:GetService("UserInputService")
+	local RunService = game:GetService("RunService")
+	
+	-- Camera
+	local Camera = workspace.CurrentCamera
+	
+	-- Settings
+	_G.CanLock = false
+	
+	local settings = {
+		keybind = Enum.KeyCode.Q
+	}
+	
+	local Aiming = false
+	
+	UserInputService.InputBegan:Connect(function(Input)
+		if _G.CanLock == false then return end
+		
+		if Input.KeyCode == settings.keybind then
+			Aiming = true
+		end
+	end)
+	
+	UserInputService.InputEnded:Connect(function(Input)
+		if _G.CanLock == false then return end
+	
+		if Input.KeyCode == settings.keybind then
+			Aiming = false
+		end
+	end)
+	
+	RunService.RenderStepped:Connect(function()
+		if Aiming then
+			Camera.CFrame = CFrame.new(Camera.CFrame.Position,ClosetPlayer().Character.HumanoidRootPart.Position)
+		end	
+	end)
+	
+end
+coroutine.wrap(NEFLDD_fake_script)()
