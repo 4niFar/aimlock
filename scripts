@@ -5,6 +5,23 @@ local LocalPlayer = Players.LocalPlayer
 
 _G.CanLock = false
 
+function ClosetPlayer()
+        local Dist = 465
+	local Target = nil
+	for i,v in pairs(Players:GetPlayers()) do
+		if v ~= LocalPlayer then
+	          	if v.Character and v.Character:FindFirstChild("HumanoidRootPart") and _G.CanLock then
+				local Magnitude = (v.Character.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+				if Magnitude < Dist then
+					Dist = Magnitude
+					Target = v
+				end
+			end
+		end
+	end
+	return Target
+end
+			
 local AimLock = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local AimButton = Instance.new("TextButton")
@@ -40,24 +57,9 @@ AimButton.MouseButton1Down:Connect(function()
 			_G.CanLock = true
 			Notif.Text = "AIM LOCK : ON"
 			Notif.TextColor3 = Color3.fromRGB(0,255,0)
-			function ClosetPlayer()
-				local Dist = 465
-				local Target = nil
-				for i,v in pairs(Players:GetPlayers()) do
-					if v ~= LocalPlayer then
-						if v.Character and v.Character:FindFirstChild("HumanoidRootPart") and _G.CanLock then
-							local Magnitude = (v.Character.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).magnitude
-							if Magnitude < Dist then
-								Dist = Magnitude
-								Target = v
-							end
-						end
-					end
-				end
-				return Target
-			end
 		else
 			_G.CanLock = false
+			Notif.Text = "AIM LOCK : OFF"
 			Notif.TextColor3 = Color3.fromRGB(255,0,0)
 		end
 	end)
